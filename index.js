@@ -51,7 +51,7 @@ const publish = async () => {
   );
 
   models.script_publish.create({
-    handler_id: publishResult?.handler_id,
+    handler_id: publishResult?.handler_id ?? "",
     status: publishResult?.status ?? "FAILED",
     created_at: Date.now(),
     hostname: endpoints[clientIndex],

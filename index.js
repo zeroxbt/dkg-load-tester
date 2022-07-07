@@ -6,7 +6,7 @@ const loadModels = require("./repository-service");
 const endpoints = require("./endpoints.json");
 
 let models;
-const sleepSeconds = 30;
+const sleepSeconds = 60;
 
 const clients = endpoints.map(
   (endpoint) =>

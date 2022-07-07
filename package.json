@@ -1,0 +1,22 @@
+{
+    "name": "dkg-load-tester.js",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "dkg.js": "github:OriginTrail/dkg.js#refactor-publish",
+        "dotenv": "^16.0.1",
+        "mysql2": "^2.3.3",
+        "random-words": "^1.2.0",
+        "sequelize": "^6.21.2",
+        "sqlite3": "^5.0.8"
+    },
+    "devDependencies": {
+        "sequelize-cli": "^6.4.1"
+    }
+}

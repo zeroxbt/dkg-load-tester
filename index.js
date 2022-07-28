@@ -93,8 +93,8 @@ const publish = async () => {
   updateRepository(
     "publish",
     publishResult,
-    publishResult.UAL,
-    publishResult.assertionId,
+    publishResult?.UAL,
+    publishResult?.assertionId,
     hostname,
     start,
     end

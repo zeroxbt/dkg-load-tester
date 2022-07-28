@@ -17,10 +17,10 @@ const clients = endpoints.map(
       communicationType: "http",
       useSSL: true,
       loglevel: "trace",
-      blockchain: "ethereum",
+      blockchain: "polygon",
       blockchainConfig: {
-        ethereum: {
-          rpc: "http://localhost:7545",
+        polygon: {
+          rpc: process.env.BLOCKCHAIN_RPC,
           hubContract: "0xdaa16AC171CfE8Df6F79C06E7EEAb2249E2C9Ec8",
           wallet: process.env.PUBLIC_KEY,
           privateKey: process.env.PRIVATE_KEY,

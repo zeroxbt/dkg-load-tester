@@ -1,7 +1,7 @@
-const sequelizeConfig = require("./config/sequelizeConfig");
-const Sequelize = require("sequelize");
-const fs = require("fs");
-const path = require("path");
+import { Sequelize } from "sequelize";
+import fs from "fs";
+import path from "path";
+import sequelizeConfig from "./config/sequelizeConfig.js";
 
 async function loadModels() {
   const modelsDirectory = "./models";
@@ -14,9 +14,9 @@ async function loadModels() {
   const models = {};
   fs.readdirSync(modelsDirectory)
     .filter((file) => file.indexOf(".") !== 0 && file.slice(-3) === ".js")
-    .forEach((file) => {
-      // eslint-disable-next-line global-require,import/no-dynamic-require
-      const model = require(`./models/${file}`)(sequelize, Sequelize.DataTypes);
+    .forEach(async (file) => {
+      const { default: f } = await import(`./models/${file}`);
+      const model = f(sequelize, Sequelize.DataTypes);
       models[model.name] = model;
     });
 

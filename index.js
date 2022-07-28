@@ -2,7 +2,7 @@ import "dotenv/config";
 import { setTimeout } from "timers/promises";
 import { DkgClient } from "dkg.js/index-new.js";
 import { readFileSync } from "fs";
-import { loadModels } from "./repository-service";
+import { loadModels } from "./repository-service.js";
 
 const endpoints = JSON.parse(readFileSync("./endpoints.json"));
 
@@ -127,7 +127,7 @@ const get = async (ual, assertionId) => {
 
   updateRepository(
     "resolve",
-    publishResult,
+    resolveResult,
     ual,
     assertionId,
     hostname,

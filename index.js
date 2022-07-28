@@ -2,8 +2,8 @@ import "dotenv/config";
 import { setTimeout } from "timers/promises";
 import { DkgClient } from "dkg.js/index-new.js";
 import { readFileSync } from "fs";
+import { loadModels } from "./repository-service";
 
-// const loadModels = require("./repository-service");
 const endpoints = JSON.parse(readFileSync("./endpoints.json"));
 
 let models;
@@ -17,9 +17,9 @@ const clients = endpoints.map(
       communicationType: "http",
       useSSL: true,
       loglevel: "trace",
-      blockchain: "polygon",
+      blockchain: "ethereum",
       blockchainConfig: {
-        polygon: {
+        ethereum: {
           rpc: process.env.BLOCKCHAIN_RPC,
           hubContract: "0xdaa16AC171CfE8Df6F79C06E7EEAb2249E2C9Ec8",
           wallet: process.env.PUBLIC_KEY,
@@ -90,7 +90,7 @@ const publish = async () => {
   const end = Date.now();
   console.log(`Publish result : ${JSON.stringify(publishResult, null, 2)}`);
 
-  /* updateRepository(
+  updateRepository(
     "publish",
     publishResult,
     publishResult.UAL,
@@ -98,7 +98,7 @@ const publish = async () => {
     hostname,
     start,
     end
-  ); */
+  );
 
   logDivider();
 
@@ -125,7 +125,7 @@ const get = async (ual, assertionId) => {
 
   console.log(`Resolve result : ${JSON.stringify(resolveResult, null, 2)}`);
 
-  /* updateRepository(
+  updateRepository(
     "resolve",
     publishResult,
     ual,
@@ -133,13 +133,13 @@ const get = async (ual, assertionId) => {
     hostname,
     start,
     end
-  ); */
+  );
 
   logDivider();
 };
 
 (async () => {
-  // models = await loadModels();
+  models = await loadModels();
   while (true) {
     const publishResult = await publish();
 

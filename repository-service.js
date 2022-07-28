@@ -31,4 +31,4 @@ async function loadModels() {
   return models;
 }
 
-module.exports = loadModels;
+export { loadModels };

@@ -1,7 +1,7 @@
-import { Sequelize } from "sequelize";
-import fs from "fs";
-import path from "path";
-import sequelizeConfig from "./config/sequelizeConfig.js";
+const fs = require("fs");
+const path = require("path");
+const { Sequelize } = require("sequelize");
+const sequelizeConfig = require("./config/sequelizeConfig.js");
 
 async function loadModels() {
   const modelsDirectory = "./models";
@@ -15,8 +15,7 @@ async function loadModels() {
   fs.readdirSync(modelsDirectory)
     .filter((file) => file.indexOf(".") !== 0 && file.slice(-3) === ".js")
     .forEach(async (file) => {
-      const { default: f } = await import(`./models/${file}`);
-      const model = f(sequelize, Sequelize.DataTypes);
+      const model = require(`./models/${file}`)(sequelize, Sequelize.DataTypes);
       models[model.name] = model;
     });
 
@@ -31,4 +30,4 @@ async function loadModels() {
   return models;
 }
 
-export { loadModels };
+module.exports = loadModels;

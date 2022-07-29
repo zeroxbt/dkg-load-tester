@@ -1,13 +1,13 @@
-import "dotenv/config";
-import { setTimeout } from "timers/promises";
-import { DkgClient } from "dkg.js/index-new.js";
-import { readFileSync } from "fs";
-import { loadModels } from "./repository-service.js";
+require("dotenv").config();
+const { setTimeout } = require("timers/promises");
+const DkgClient = require("dkg.js");
+const { readFileSync } = require("fs");
+const loadModels = require("./repository-service.js");
 
 const endpoints = JSON.parse(readFileSync("./endpoints.json"));
 
 let models;
-const sleepSeconds = 60;
+const sleepSeconds = 15;
 
 const clients = endpoints.map(
   (endpoint) =>
@@ -17,9 +17,9 @@ const clients = endpoints.map(
       communicationType: "http",
       useSSL: true,
       loglevel: "trace",
-      blockchain: "ethereum",
+      blockchain: "polygon",
       blockchainConfig: {
-        ethereum: {
+        polygon: {
           rpc: process.env.BLOCKCHAIN_RPC,
           hubContract: "0xdaa16AC171CfE8Df6F79C06E7EEAb2249E2C9Ec8",
           wallet: process.env.PUBLIC_KEY,
@@ -52,8 +52,8 @@ const updateRepository = (
   operationEnd
 ) => {
   models[`script_${operation}`].create({
-    handler_id: operationResult?.operation_id ?? "",
-    status: operationResult?.status ?? "FAILED",
+    handler_id: operationResult?.operation?.operationId ?? "",
+    status: operationResult?.operation?.status ?? "FAILED",
     created_at: Date.now(),
     hostname,
     ual,
@@ -77,7 +77,7 @@ const publish = async () => {
     visibility: "public",
     holdingTimeInYears: 1,
     tokenAmount: 10,
-    blockchain: "ethereum",
+    blockchain: "polygon",
     wallet: process.env.PUBLIC_KEY,
     maxNumberOfRetries: 5,
   };
@@ -112,7 +112,7 @@ const get = async (ual, assertionId) => {
     validate: true,
     outputFormat: "json-ld",
     commitOffset: 0,
-    blockchain: "ethereum",
+    blockchain: "polygon",
     maxNumberOfRetries: 5,
   };
   const { client, hostname } = getRandomClient("resolve");
@@ -143,8 +143,8 @@ const get = async (ual, assertionId) => {
   while (true) {
     const publishResult = await publish();
 
-    if (publishResult && publishResult.status === "COMPLETED") {
-      await get(publishResult.UAL, publishResult.assertionId);
+    if (publishResult?.operation?.status === "COMPLETED") {
+      await get(publishResult?.UAL, publishResult?.assertionId);
     }
 
     await setTimeout(1000 * sleepSeconds);

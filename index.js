@@ -41,10 +41,12 @@ const logDivider = () => {
   );
 };
 
-const getRandomClient = (operation) => {
+const getRandomClient = (operation, blockchain) => {
   const clientIndex = Math.floor(Math.random() * clients.length);
   const hostname = endpoints[clientIndex];
-  console.log(`Calling ${operation} from endpoint : ${hostname}`);
+  console.log(
+    `Calling ${operation} on blockchain: ${blockchain}, endpoint: ${hostname}`
+  );
   return { hostname, client: clients[clientIndex] };
 };
 
@@ -90,7 +92,7 @@ const publish = async (blockchain) => {
     maxNumberOfRetries: 5,
   };
 
-  const { client, hostname } = getRandomClient("publish");
+  const { client, hostname } = getRandomClient("publish", blockchain);
   const start = Date.now();
   const publishResult = await client.asset
     .create(content, publishOptions)
@@ -124,7 +126,7 @@ const get = async (ual, assertionId, blockchain) => {
     blockchain,
     maxNumberOfRetries: 5,
   };
-  const { client, hostname } = getRandomClient("get");
+  const { client, hostname } = getRandomClient("get", blockchain);
 
   const start = Date.now();
   const getResult = await client.asset

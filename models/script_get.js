@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       start_timestamp: DataTypes.STRING,
       end_timestamp: DataTypes.STRING,
       blockchain: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },

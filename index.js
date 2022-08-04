@@ -7,7 +7,7 @@ const loadModels = require("./repository-service.js");
 const endpoints = JSON.parse(readFileSync("./endpoints.json"));
 
 let models;
-const sleepSeconds = 15;
+const blockchains = ["polygon", "otp"];
 
 const clients = endpoints.map(
   (endpoint) =>
@@ -20,8 +20,14 @@ const clients = endpoints.map(
       blockchain: "polygon",
       blockchainConfig: {
         polygon: {
-          rpc: process.env.BLOCKCHAIN_RPC,
+          rpc: process.env.POLYGON_RPC,
           hubContract: "0xdaa16AC171CfE8Df6F79C06E7EEAb2249E2C9Ec8",
+          wallet: process.env.PUBLIC_KEY,
+          privateKey: process.env.PRIVATE_KEY,
+        },
+        otp: {
+          rpc: process.env.OTP_RPC,
+          hubContract: "0x6e002616ADf12D4Cc908976eB16a7646B6cD6596",
           wallet: process.env.PUBLIC_KEY,
           privateKey: process.env.PRIVATE_KEY,
         },
@@ -49,10 +55,11 @@ const updateRepository = (
   assertionId,
   hostname,
   operationStart,
-  operationEnd
+  operationEnd,
+  blockchain
 ) => {
   models[`script_${operation}`].create({
-    handler_id: operationResult?.operation?.operationId ?? "",
+    operation_id: operationResult?.operation?.operationId ?? "",
     status: operationResult?.operation?.status ?? "FAILED",
     created_at: Date.now(),
     hostname,
@@ -60,10 +67,11 @@ const updateRepository = (
     assertion_id: assertionId,
     start_timestamp: operationStart,
     end_timestamp: operationEnd,
+    blockchain,
   });
 };
 
-const publish = async () => {
+const publish = async (blockchain) => {
   logDivider();
 
   const content = {
@@ -77,7 +85,7 @@ const publish = async () => {
     visibility: "public",
     holdingTimeInYears: 1,
     tokenAmount: 10,
-    blockchain: "polygon",
+    blockchain,
     wallet: process.env.PUBLIC_KEY,
     maxNumberOfRetries: 5,
   };
@@ -97,7 +105,8 @@ const publish = async () => {
     publishResult?.assertionId,
     hostname,
     start,
-    end
+    end,
+    blockchain
   );
 
   logDivider();
@@ -105,34 +114,35 @@ const publish = async () => {
   return publishResult;
 };
 
-const get = async (ual, assertionId) => {
+const get = async (ual, assertionId, blockchain) => {
   logDivider();
 
   let getOptions = {
     validate: true,
     outputFormat: "json-ld",
     commitOffset: 0,
-    blockchain: "polygon",
+    blockchain,
     maxNumberOfRetries: 5,
   };
-  const { client, hostname } = getRandomClient("resolve");
+  const { client, hostname } = getRandomClient("get");
 
   const start = Date.now();
-  const resolveResult = await client.asset
+  const getResult = await client.asset
     .get(ual, getOptions)
-    .catch((e) => console.log(`Resolving error : ${e.message}`));
+    .catch((e) => console.log(`Get error : ${e.message}`));
   const end = Date.now();
 
-  console.log(`Resolve result : ${JSON.stringify(resolveResult, null, 2)}`);
+  console.log(`Get result : ${JSON.stringify(getResult, null, 2)}`);
 
   updateRepository(
-    "resolve",
-    resolveResult,
+    "get",
+    getResult,
     ual,
     assertionId,
     hostname,
     start,
-    end
+    end,
+    blockchain
   );
 
   logDivider();
@@ -141,12 +151,12 @@ const get = async (ual, assertionId) => {
 (async () => {
   models = await loadModels();
   while (true) {
-    const publishResult = await publish();
+    const blockchain =
+      blockchains[Math.floor(Math.random() * blockchains.length)];
+    const publishResult = await publish(blockchain);
 
     if (publishResult?.operation?.status === "COMPLETED") {
-      await get(publishResult?.UAL, publishResult?.assertionId);
+      await get(publishResult?.UAL, publishResult?.assertionId, blockchain);
     }
-
-    await setTimeout(1000 * sleepSeconds);
   }
 })();

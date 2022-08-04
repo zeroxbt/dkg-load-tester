@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const resolve = sequelize.define(
+  const publish = sequelize.define(
     "script_publish",
     {
       id: {
@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      handler_id: DataTypes.UUID,
+      operation_id: DataTypes.UUID,
       status: DataTypes.STRING,
       created_at: DataTypes.DATE,
       hostname: DataTypes.STRING,
@@ -15,11 +15,15 @@ module.exports = (sequelize, DataTypes) => {
       assertion_id: DataTypes.STRING,
       start_timestamp: DataTypes.STRING,
       end_timestamp: DataTypes.STRING,
+      blockchain: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
     },
     {}
   );
-  resolve.associate = (models) => {
+  publish.associate = (models) => {
     // associations can be defined here
   };
-  return resolve;
+  return publish;
 };

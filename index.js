@@ -167,12 +167,12 @@ const get = async (ual, assertionId, blockchain) => {
 (async () => {
   models = await loadModels();
   while (true) {
-    const blockchain =
-      blockchains[Math.floor(Math.random() * blockchains.length)];
-    const publishResult = await publish(blockchain);
+    for (const blockchain of blockchains) {
+      const publishResult = await publish(blockchain);
 
-    if (publishResult?.operation?.status === "COMPLETED") {
-      await get(publishResult?.UAL, publishResult?.assertionId, blockchain);
+      if (publishResult?.operation?.status === "COMPLETED") {
+        await get(publishResult?.UAL, publishResult?.assertionId, blockchain);
+      }
     }
   }
 })();

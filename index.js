@@ -1,5 +1,4 @@
 require("dotenv").config();
-const { setTimeout } = require("timers/promises");
 const DkgClient = require("dkg.js");
 const { readFileSync } = require("fs");
 const loadModels = require("./repository-service.js");
@@ -9,31 +8,46 @@ const endpoints = JSON.parse(readFileSync("./endpoints.json"));
 let models;
 const blockchains = ["polygon", "otp"];
 
-const clients = endpoints.map(
-  (endpoint) =>
-    new DkgClient({
-      endpoint,
-      port: 8900,
-      communicationType: "http",
-      useSSL: true,
-      loglevel: "trace",
-      blockchain: "polygon",
-      blockchainConfig: {
-        polygon: {
-          rpc: process.env.POLYGON_RPC,
-          hubContract: "0xdaa16AC171CfE8Df6F79C06E7EEAb2249E2C9Ec8",
-          wallet: process.env.PUBLIC_KEY,
-          privateKey: process.env.PRIVATE_KEY,
+const clients = {
+  polygon: endpoints.map(
+    (endpoint) =>
+      new DkgClient({
+        endpoint,
+        port: 8900,
+        communicationType: "http",
+        useSSL: true,
+        loglevel: "trace",
+        blockchain: "polygon",
+        blockchainConfig: {
+          polygon: {
+            rpc: process.env.POLYGON_RPC,
+            hubContract: "0xdaa16AC171CfE8Df6F79C06E7EEAb2249E2C9Ec8",
+            wallet: process.env.PUBLIC_KEY,
+            privateKey: process.env.PRIVATE_KEY,
+          },
         },
-        otp: {
-          rpc: process.env.OTP_RPC,
-          hubContract: "0x6e002616ADf12D4Cc908976eB16a7646B6cD6596",
-          wallet: process.env.PUBLIC_KEY,
-          privateKey: process.env.PRIVATE_KEY,
+      })
+  ),
+  otp: endpoints.map(
+    (endpoint) =>
+      new DkgClient({
+        endpoint,
+        port: 8900,
+        communicationType: "http",
+        useSSL: true,
+        loglevel: "trace",
+        blockchain: "otp",
+        blockchainConfig: {
+          otp: {
+            rpc: process.env.OTP_RPC,
+            hubContract: "0x6e002616ADf12D4Cc908976eB16a7646B6cD6596",
+            wallet: process.env.PUBLIC_KEY,
+            privateKey: process.env.PRIVATE_KEY,
+          },
         },
-      },
-    })
-);
+      })
+  ),
+};
 
 const logDivider = () => {
   console.log(
@@ -42,12 +56,12 @@ const logDivider = () => {
 };
 
 const getRandomClient = (operation, blockchain) => {
-  const clientIndex = Math.floor(Math.random() * clients.length);
+  const clientIndex = Math.floor(Math.random() * clients[blockchain].length);
   const hostname = endpoints[clientIndex];
   console.log(
     `Calling ${operation} on blockchain: ${blockchain}, endpoint: ${hostname}`
   );
-  return { hostname, client: clients[clientIndex] };
+  return { hostname, client: clients[blockchain][clientIndex] };
 };
 
 const updateRepository = (

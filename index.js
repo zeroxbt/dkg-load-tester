@@ -72,7 +72,8 @@ const updateRepository = (
   hostname,
   operationStart,
   operationEnd,
-  blockchain
+  blockchain,
+  error
 ) => {
   models[`script_${operation}`].create({
     operation_id: operationResult?.operation?.operationId ?? "",
@@ -84,6 +85,7 @@ const updateRepository = (
     start_timestamp: operationStart,
     end_timestamp: operationEnd,
     blockchain,
+    error,
   });
 };
 
@@ -108,9 +110,13 @@ const publish = async (blockchain) => {
 
   const { client, hostname } = getRandomClient("publish", blockchain);
   const start = Date.now();
+  let errorMessage = null;
   const publishResult = await client.asset
     .create(content, publishOptions)
-    .catch((e) => console.log(`Publishing error : ${e.message}`));
+    .catch((e) => {
+      errorMessage = e.message;
+      console.log(`Publishing error : ${errorMessage}`);
+    });
   const end = Date.now();
   console.log(`Publish result : ${JSON.stringify(publishResult, null, 2)}`);
 
@@ -122,7 +128,8 @@ const publish = async (blockchain) => {
     hostname,
     start,
     end,
-    blockchain
+    blockchain,
+    errorMessage
   );
 
   logDivider();
@@ -143,9 +150,11 @@ const get = async (ual, assertionId, blockchain) => {
   const { client, hostname } = getRandomClient("get", blockchain);
 
   const start = Date.now();
-  const getResult = await client.asset
-    .get(ual, getOptions)
-    .catch((e) => console.log(`Get error : ${e.message}`));
+  let errorMessage = null;
+  const getResult = await client.asset.get(ual, getOptions).catch((e) => {
+    errorMessage = e.message;
+    console.log(`Get error : ${errorMessage}`);
+  });
   const end = Date.now();
 
   console.log(`Get result : ${JSON.stringify(getResult, null, 2)}`);
@@ -158,7 +167,8 @@ const get = async (ual, assertionId, blockchain) => {
     hostname,
     start,
     end,
-    blockchain
+    blockchain,
+    errorMessage
   );
 
   logDivider();

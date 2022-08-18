@@ -57,12 +57,12 @@ const updateRepository = (
     end_timestamp: operationEnd,
     blockchain,
     errorMessage:
-      publishResult?.operation?.status === "FAILED"
-        ? publishResult?.operation?.errorMessage
+      operationResult?.operation?.status === "FAILED"
+        ? operationResult?.operation?.errorMessage
         : errorMessage,
     errorType:
-      publishResult?.operation?.status === "FAILED"
-        ? publishResult?.operation?.errorType
+      operationResult?.operation?.status === "FAILED"
+        ? operationResult?.operation?.errorType
         : errorType,
   });
 };

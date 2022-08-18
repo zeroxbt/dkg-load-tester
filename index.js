@@ -85,7 +85,7 @@ const publish = async (blockchain) => {
     maxNumberOfRetries: 5,
   };
 
-  const { client, hostname } = getRandomClient("publish", blockchain);
+  const { client, hostname } = getRandomClient("publish", blockchain.name);
   const start = Date.now();
   let errorMessage = null;
   let errorType = null;
@@ -126,7 +126,7 @@ const get = async (ual, assertionId, blockchain) => {
     blockchain,
     maxNumberOfRetries: 5,
   };
-  const { client, hostname } = getRandomClient("get", blockchain);
+  const { client, hostname } = getRandomClient("get", blockchain.name);
 
   const start = Date.now();
   let errorMessage = null;

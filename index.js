@@ -108,7 +108,7 @@ const publish = async (blockchain) => {
     hostname,
     start,
     end,
-    blockchain,
+    blockchain.name,
     errorMessage,
     errorType
   );
@@ -148,7 +148,7 @@ const get = async (ual, assertionId, blockchain) => {
     hostname,
     start,
     end,
-    blockchain,
+    blockchain.name,
     errorMessage,
     errorType
   );

@@ -6,48 +6,18 @@ const loadModels = require("./repository-service.js");
 const endpoints = JSON.parse(readFileSync("./endpoints.json"));
 
 let models;
-const blockchains = ["polygon", "otp"];
 
-const clients = {
-  polygon: endpoints.map(
+const CLIENT_ERROR_TYPE = "DKG_CLIENT_ERROR";
+
+const clients = endpoints.map(
     (endpoint) =>
       new DkgClient({
         endpoint,
         port: 8900,
-        communicationType: "http",
         useSSL: true,
         loglevel: "trace",
-        blockchain: "polygon",
-        blockchainConfig: {
-          polygon: {
-            rpc: process.env.POLYGON_RPC,
-            hubContract: "0xdaa16AC171CfE8Df6F79C06E7EEAb2249E2C9Ec8",
-            wallet: process.env.PUBLIC_KEY,
-            privateKey: process.env.PRIVATE_KEY,
-          },
-        },
       })
-  ),
-  otp: endpoints.map(
-    (endpoint) =>
-      new DkgClient({
-        endpoint,
-        port: 8900,
-        communicationType: "http",
-        useSSL: true,
-        loglevel: "trace",
-        blockchain: "otp",
-        blockchainConfig: {
-          otp: {
-            rpc: process.env.OTP_RPC,
-            hubContract: "0x6e002616ADf12D4Cc908976eB16a7646B6cD6596",
-            wallet: process.env.PUBLIC_KEY,
-            privateKey: process.env.PRIVATE_KEY,
-          },
-        },
-      })
-  ),
-};
+  )
 
 const logDivider = () => {
   console.log(
@@ -56,12 +26,12 @@ const logDivider = () => {
 };
 
 const getRandomClient = (operation, blockchain) => {
-  const clientIndex = Math.floor(Math.random() * clients[blockchain].length);
+  const clientIndex = Math.floor(Math.random() * clients.length);
   const hostname = endpoints[clientIndex];
   console.log(
     `Calling ${operation} on blockchain: ${blockchain}, endpoint: ${hostname}`
   );
-  return { hostname, client: clients[blockchain][clientIndex] };
+  return { hostname, client: clients[clientIndex] };
 };
 
 const updateRepository = (
@@ -73,7 +43,8 @@ const updateRepository = (
   operationStart,
   operationEnd,
   blockchain,
-  error
+  errorMessage,
+  errorType
 ) => {
   models[`script_${operation}`].create({
     operation_id: operationResult?.operation?.operationId ?? "",
@@ -85,7 +56,14 @@ const updateRepository = (
     start_timestamp: operationStart,
     end_timestamp: operationEnd,
     blockchain,
-    error,
+    errorMessage:
+      publishResult?.operation?.status === "FAILED"
+        ? publishResult?.operation?.errorMessage
+        : errorMessage,
+    errorType:
+      publishResult?.operation?.status === "FAILED"
+        ? publishResult?.operation?.errorType
+        : errorType,
   });
 };
 
@@ -104,19 +82,21 @@ const publish = async (blockchain) => {
     holdingTimeInYears: 1,
     tokenAmount: 10,
     blockchain,
-    wallet: process.env.PUBLIC_KEY,
     maxNumberOfRetries: 5,
   };
 
   const { client, hostname } = getRandomClient("publish", blockchain);
   const start = Date.now();
   let errorMessage = null;
+  let errorType = null;
   const publishResult = await client.asset
     .create(content, publishOptions)
     .catch((e) => {
+      errorType = CLIENT_ERROR_TYPE;
       errorMessage = e.message;
       console.log(`Publishing error : ${errorMessage}`);
     });
+
   const end = Date.now();
   console.log(`Publish result : ${JSON.stringify(publishResult, null, 2)}`);
 
@@ -129,7 +109,8 @@ const publish = async (blockchain) => {
     start,
     end,
     blockchain,
-    errorMessage
+    errorMessage,
+    errorType
   );
 
   logDivider();
@@ -142,8 +123,6 @@ const get = async (ual, assertionId, blockchain) => {
 
   let getOptions = {
     validate: true,
-    outputFormat: "json-ld",
-    commitOffset: 0,
     blockchain,
     maxNumberOfRetries: 5,
   };
@@ -151,7 +130,9 @@ const get = async (ual, assertionId, blockchain) => {
 
   const start = Date.now();
   let errorMessage = null;
+  let errorType = null;
   const getResult = await client.asset.get(ual, getOptions).catch((e) => {
+    errorType = CLIENT_ERROR_TYPE;
     errorMessage = e.message;
     console.log(`Get error : ${errorMessage}`);
   });
@@ -168,7 +149,8 @@ const get = async (ual, assertionId, blockchain) => {
     start,
     end,
     blockchain,
-    errorMessage
+    errorMessage,
+    errorType
   );
 
   logDivider();
@@ -177,12 +159,18 @@ const get = async (ual, assertionId, blockchain) => {
 (async () => {
   models = await loadModels();
   while (true) {
-    for (const blockchain of blockchains) {
-      const publishResult = await publish(blockchain);
+      const publishResult = await publish({
+        name: "otp",
+        publicKey: process.env.PUBLIC_KEY,
+        privateKey: process.env.PRIVATE_KEY,
+      });
 
       if (publishResult?.operation?.status === "COMPLETED") {
-        await get(publishResult?.UAL, publishResult?.assertionId, blockchain);
+        await get(publishResult?.UAL, publishResult?.assertionId, {
+          name: "otp",
+          publicKey: process.env.PUBLIC_KEY,
+          privateKey: process.env.PRIVATE_KEY,
+        });
       }
-    }
   }
 })();

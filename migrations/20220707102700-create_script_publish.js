@@ -39,15 +39,15 @@ module.exports = {
         defaultValue: Sequelize.literal("NOW()"),
       },
       blockchain: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       errorMessage: {
-        type: DataTypes.TEXT,
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       errorType: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true,
       },
     });

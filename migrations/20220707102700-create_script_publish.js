@@ -17,7 +17,7 @@ module.exports = {
         defaultValue: Sequelize.literal("NOW()"),
       },
       hostname: { allowNull: false, type: Sequelize.STRING },
-      handler_id: {
+      operation_id: {
         type: Sequelize.UUID,
         allowNull: false,
       },
@@ -37,6 +37,18 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal("NOW()"),
+      },
+      blockchain: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      errorMessage: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      errorType: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     });
   },

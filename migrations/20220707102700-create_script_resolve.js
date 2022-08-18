@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("script_resolve", {
+    await queryInterface.createTable("script_get", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -17,7 +17,7 @@ module.exports = {
         defaultValue: Sequelize.literal("NOW()"),
       },
       hostname: { allowNull: false, type: Sequelize.STRING },
-      handler_id: {
+      operation_id: {
         type: Sequelize.UUID,
         allowNull: false,
       },
@@ -38,9 +38,21 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal("NOW()"),
       },
+      blockchain: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      errorMessage: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      errorType: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     });
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable("script_resolve");
+    await queryInterface.dropTable("script_get");
   },
 };

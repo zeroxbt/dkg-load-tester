@@ -9,15 +9,11 @@ let models;
 
 const CLIENT_ERROR_TYPE = "DKG_CLIENT_ERROR";
 
-const clients = endpoints.map(
-    (endpoint) =>
-      new DkgClient({
-        endpoint,
-        port: 8900,
-        useSSL: true,
-        loglevel: "trace",
-      })
-  )
+const client = new DkgClient({
+  port: 8900,
+  useSSL: true,
+  loglevel: "trace",
+});
 
 const logDivider = () => {
   console.log(
@@ -25,13 +21,12 @@ const logDivider = () => {
   );
 };
 
-const getRandomClient = (operation, blockchain) => {
-  const clientIndex = Math.floor(Math.random() * clients.length);
-  const hostname = endpoints[clientIndex];
+const getRandomEndpoint = (operation, blockchain) => {
+  const hostnameIndex = Math.floor(Math.random() * endpoints.length);
   console.log(
-    `Calling ${operation} on blockchain: ${blockchain}, endpoint: ${hostname}`
+    `Calling ${operation} on blockchain: ${blockchain}, endpoint: ${endpoint}`
   );
-  return { hostname, client: clients[clientIndex] };
+  return endpoints[clientIndex];
 };
 
 const updateRepository = (
@@ -77,15 +72,16 @@ const publish = async (blockchain) => {
     identifier: Math.floor(Math.random() * 1e10),
   };
 
+  const hostname = getRandomClient("publish", blockchain.name);
   let publishOptions = {
     visibility: "public",
     holdingTimeInYears: 1,
     tokenAmount: 10,
     blockchain,
     maxNumberOfRetries: 5,
+    endpoint: hostname,
   };
 
-  const { client, hostname } = getRandomClient("publish", blockchain.name);
   const start = Date.now();
   let errorMessage = null;
   let errorType = null;
@@ -121,12 +117,13 @@ const publish = async (blockchain) => {
 const get = async (ual, assertionId, blockchain) => {
   logDivider();
 
+  const hostname = getRandomClient("get", blockchain.name);
   let getOptions = {
     validate: true,
     blockchain,
     maxNumberOfRetries: 5,
+    endpoint: hostname,
   };
-  const { client, hostname } = getRandomClient("get", blockchain.name);
 
   const start = Date.now();
   let errorMessage = null;
@@ -159,18 +156,18 @@ const get = async (ual, assertionId, blockchain) => {
 (async () => {
   models = await loadModels();
   while (true) {
-      const publishResult = await publish({
+    const publishResult = await publish({
+      name: "otp",
+      publicKey: process.env.PUBLIC_KEY,
+      privateKey: process.env.PRIVATE_KEY,
+    });
+
+    if (publishResult?.operation?.status === "COMPLETED") {
+      await get(publishResult?.UAL, publishResult?.assertionId, {
         name: "otp",
         publicKey: process.env.PUBLIC_KEY,
         privateKey: process.env.PRIVATE_KEY,
       });
-
-      if (publishResult?.operation?.status === "COMPLETED") {
-        await get(publishResult?.UAL, publishResult?.assertionId, {
-          name: "otp",
-          publicKey: process.env.PUBLIC_KEY,
-          privateKey: process.env.PRIVATE_KEY,
-        });
-      }
+    }
   }
 })();

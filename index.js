@@ -23,10 +23,11 @@ const logDivider = () => {
 
 const getRandomEndpoint = (operation, blockchain) => {
   const hostnameIndex = Math.floor(Math.random() * endpoints.length);
+  const endpoint = endpoints[hostnameIndex];
   console.log(
     `Calling ${operation} on blockchain: ${blockchain}, endpoint: ${endpoint}`
   );
-  return endpoints[clientIndex];
+  return endpoint;
 };
 
 const updateRepository = (
@@ -72,7 +73,7 @@ const publish = async (blockchain) => {
     identifier: Math.floor(Math.random() * 1e10),
   };
 
-  const hostname = getRandomClient("publish", blockchain.name);
+  const hostname = getRandomEndpoint("publish", blockchain.name);
   let publishOptions = {
     visibility: "public",
     holdingTimeInYears: 1,
@@ -117,7 +118,7 @@ const publish = async (blockchain) => {
 const get = async (ual, assertionId, blockchain) => {
   logDivider();
 
-  const hostname = getRandomClient("get", blockchain.name);
+  const hostname = getRandomEndpoint("get", blockchain.name);
   let getOptions = {
     validate: true,
     blockchain,

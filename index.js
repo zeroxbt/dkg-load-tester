@@ -2,7 +2,7 @@ require("dotenv").config();
 const DkgClient = require("dkg.js");
 const { readFileSync } = require("fs");
 const loadModels = require("./repository-service.js");
-const {setTimeout} = require("timers/promises")
+const { setTimeout } = require("timers/promises");
 
 const endpoints = JSON.parse(readFileSync("./endpoints.json"));
 
@@ -53,14 +53,8 @@ const updateRepository = (
     start_timestamp: operationStart,
     end_timestamp: operationEnd,
     blockchain,
-    errorMessage:
-      operationResult?.operation?.status === "FAILED"
-        ? operationResult?.operation?.errorMessage
-        : errorMessage,
-    errorType:
-      operationResult?.operation?.status === "FAILED"
-        ? operationResult?.operation?.errorType
-        : errorType,
+    errorMessage: operationResult?.operation?.errorMessage ?? errorMessage,
+    errorType: operationResult?.operation?.errorType ?? errorType,
   });
 };
 
@@ -164,7 +158,7 @@ const get = async (ual, assertionId, blockchain) => {
       privateKey: process.env.PRIVATE_KEY,
     });
 
-    await setTimeout(5 * 1000)
+    await setTimeout(5 * 1000);
 
     if (publishResult?.operation?.status === "COMPLETED") {
       await get(publishResult?.UAL, publishResult?.assertionId, {

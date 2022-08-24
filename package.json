@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dkg.js": "github:OriginTrail/dkg.js#feature/dkg-client",
+    "dkg.js": "github:OriginTrail/dkg.js#improvement/client-errors",
     "dotenv": "^16.0.1",
     "mysql2": "^2.3.3",
     "random-words": "^1.2.0",

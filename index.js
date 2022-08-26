@@ -74,7 +74,8 @@ const publish = async (blockchain) => {
     holdingTimeInYears: 1,
     tokenAmount: 10,
     blockchain,
-    maxNumberOfRetries: 5,
+    maxNumberOfRetries: 30,
+    frequency: 2,
     endpoint: hostname,
   };
 
@@ -117,7 +118,8 @@ const get = async (ual, assertionId, blockchain) => {
   let getOptions = {
     validate: true,
     blockchain,
-    maxNumberOfRetries: 5,
+    maxNumberOfRetries: 30,
+    frequency: 2,
     endpoint: hostname,
   };
 

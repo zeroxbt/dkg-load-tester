@@ -156,6 +156,7 @@ const get = async (ual, assertionId, blockchain) => {
       name: "otp",
       publicKey: process.env.PUBLIC_KEY,
       privateKey: process.env.PRIVATE_KEY,
+      rpc: "wss://devnet-parachain-rpc-05.origin-trail.network"
     });
 
     await setTimeout(5 * 1000);
@@ -167,6 +168,5 @@ const get = async (ual, assertionId, blockchain) => {
         privateKey: process.env.PRIVATE_KEY,
       });
     }
-    await setTimeout(5 * 1000);
   }
 })();

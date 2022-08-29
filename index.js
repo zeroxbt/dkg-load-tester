@@ -5,6 +5,7 @@ const loadModels = require("./repository-service.js");
 const { setTimeout } = require("timers/promises");
 
 const endpoints = JSON.parse(readFileSync("./endpoints.json"));
+const wallets = JSON.parse(readFileSync("./wallets.json"));
 
 let models;
 
@@ -15,6 +16,7 @@ const client = new DkgClient({
   useSSL: true,
   loglevel: "trace",
 });
+
 
 const logDivider = () => {
   console.log(
@@ -154,21 +156,23 @@ const get = async (ual, assertionId, blockchain) => {
 (async () => {
   models = await loadModels();
   while (true) {
-    const publishResult = await publish({
-      name: "otp",
-      publicKey: process.env.PUBLIC_KEY,
-      privateKey: process.env.PRIVATE_KEY,
-      rpc: "wss://devnet-parachain-rpc-05.origin-trail.network"
-    });
-
-    await setTimeout(5 * 1000);
-
-    if (publishResult?.operation?.status === "COMPLETED") {
-      await get(publishResult?.UAL, publishResult?.assertionId, {
+    for(const {publicKey, privateKey} of wallets) {
+      const publishResult = await publish({
         name: "otp",
-        publicKey: process.env.PUBLIC_KEY,
-        privateKey: process.env.PRIVATE_KEY,
+        publicKey,
+        privateKey,
+        rpc: "wss://devnet-parachain-rpc-05.origin-trail.network",
       });
+
+      await setTimeout(5 * 1000);
+
+      if (publishResult?.operation?.status === "COMPLETED") {
+        await get(publishResult?.UAL, publishResult?.assertionId, {
+          name: "otp",
+          publicKey,
+          privateKey,
+        });
+      }
     }
   }
 })();

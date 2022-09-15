@@ -1,7 +1,6 @@
 const fs = require("fs");
-const path = require("path");
 const { Sequelize } = require("sequelize");
-const sequelizeConfig = require("./config/sequelizeConfig.js");
+const sequelizeConfig = require("../../config/sequelizeConfig.js");
 
 async function loadModels() {
   const modelsDirectory = "./models";

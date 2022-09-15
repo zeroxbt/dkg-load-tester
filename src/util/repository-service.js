@@ -14,7 +14,7 @@ async function loadModels() {
   fs.readdirSync(modelsDirectory)
     .filter((file) => file.indexOf(".") !== 0 && file.slice(-3) === ".js")
     .forEach(async (file) => {
-      const model = require(`./models/${file}`)(sequelize, Sequelize.DataTypes);
+      const model = require(`../../models/${file}`)(sequelize, Sequelize.DataTypes);
       models[model.name] = model;
     });
 

@@ -30,7 +30,7 @@ class OTNode {
       maxNumberOfRetries: 30,
       frequency: 2,
       endpoint,
-      blockchain: { ...blockchain, ...wallet },
+      blockchain: { ...this.blockchain, ...wallet },
     };
 
     return this.operation("publish", "create", [content, options]);
@@ -42,7 +42,7 @@ class OTNode {
       maxNumberOfRetries: 30,
       frequency: 2,
       endpoint,
-      blockchain: { ...blockchain, ...wallet },
+      blockchain: { ...this.blockchain, ...wallet },
     };
 
     return this.operation("get", "get", [ual, options]);

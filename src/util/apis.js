@@ -20,10 +20,10 @@ module.exports = [
       name: "marineregions.org",
       getData: () => getRandomMarineRegions(),
     },
-    {
+    /* {
       name: "isaaffik.org on arctic infrastructure",
       getData: () => getRandomArcticInfrastructure(),
-    },
+    }, */
   ],
   ...(process.env.GOOGLE_API_KEY
     ? [

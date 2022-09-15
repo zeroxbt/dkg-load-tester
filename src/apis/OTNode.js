@@ -63,9 +63,9 @@ class OTNode {
       errorMessage = e.message;
       console.log(`${type} error : ${errorMessage}`);
     });
-
     const end = Date.now();
-    console.log(`${type} result : ${JSON.stringify(result, null, 2)}`);
+
+    console.log(`${type} result : ${JSON.stringify(type === "get" ? {...result, assertion: undefined} : result, null, 2)}`);
 
     this.repository.updateRepository(
       type,

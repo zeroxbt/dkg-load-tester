@@ -58,7 +58,7 @@ class OTNode {
     const start = Date.now();
     let errorType = null;
     let errorMessage = null;
-    const result = await dkg.asset[operation](...args).catch((e) => {
+    const result = await this.dkg.asset[operation](...args).catch((e) => {
       errorType = CLIENT_ERROR_TYPE;
       errorMessage = e.message;
       console.log(`${type} error : ${errorMessage}`);

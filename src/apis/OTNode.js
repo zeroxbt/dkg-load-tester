@@ -33,7 +33,7 @@ class OTNode {
       blockchain: { ...this.blockchain, ...wallet },
     };
 
-    return this.operation("publish", "create", [content, options]);
+    return this.operation("publish", "create", [content], options);
   }
 
   async get(ual, endpoint, wallet) {
@@ -45,20 +45,20 @@ class OTNode {
       blockchain: { ...this.blockchain, ...wallet },
     };
 
-    return this.operation("get", "get", [ual, options]);
+    return this.operation("get", "get", [ual], options);
   }
 
-  async operation(type, operation, args) {
+  async operation(type, operation, args, options) {
     this.logDivider();
 
     console.log(
-      `Calling ${type} on blockchain: ${this.blockchain.name}, endpoint: ${args[1].endpoint}`
+      `Calling ${type} on blockchain: ${this.blockchain.name}, endpoint: ${options.endpoint}`
     );
 
     const start = Date.now();
     let errorType = null;
     let errorMessage = null;
-    const result = await this.dkg.asset[operation](...args).catch((e) => {
+    const result = await this.dkg.asset[operation](...args, options).catch((e) => {
       errorType = CLIENT_ERROR_TYPE;
       errorMessage = e.message;
       console.log(`${type} error : ${errorMessage}`);
@@ -72,7 +72,7 @@ class OTNode {
       result,
       result?.UAL,
       result?.assertionId,
-      hostname,
+      options.endpoint,
       start,
       end,
       blockchain.name,

@@ -16,11 +16,11 @@ const wallets = require("./wallets.json");
       const data = await api.getData();
 
       // create asset
-      const publishResult = await publish(data, getRandomEndpoint(), wallets[walletIndex]);
+      const publishResult = await otnode.publish(data, getRandomEndpoint(), wallets[walletIndex]);
 
       // get asset
       if (publishResult?.UAL) {
-        await get(publishResult.UAL, getRandomEndpoint(), wallets[walletIndex]);
+        await otnode.get(publishResult.UAL, getRandomEndpoint(), wallets[walletIndex]);
       }
 
       // sleep 5 seconds

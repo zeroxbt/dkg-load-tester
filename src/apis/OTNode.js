@@ -75,7 +75,7 @@ class OTNode {
       options.endpoint,
       start,
       end,
-      blockchain.name,
+      this.blockchain.name,
       errorMessage,
       errorType
     );

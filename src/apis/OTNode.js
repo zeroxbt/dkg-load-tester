@@ -49,7 +49,7 @@ class OTNode {
   }
 
   async operation(type, operation, args) {
-    logDivider();
+    this.logDivider();
 
     console.log(
       `Calling ${type} on blockchain: ${this.blockchain.name}, endpoint: ${args[1].endpoint}`
@@ -80,9 +80,13 @@ class OTNode {
       errorType
     );
 
-    logDivider();
+    this.logDivider();
 
     return result;
+  }
+
+  logDivider() {
+    console.log("---------------------------------------------------------------------")
   }
 }
 

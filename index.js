@@ -22,7 +22,7 @@ async function queryNode(otnode, endpoint, wallet, api) {
 
 (async () => {
   const clients = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 8; i++) {
     const otnode = new OTNode();
     await otnode.initialize();
     clients.push(otnode);
@@ -30,8 +30,8 @@ async function queryNode(otnode, endpoint, wallet, api) {
 
   while (true) {
     const promises = [];
-    const endpoints = getRandomEndpoints(4);
-    for (let i = 0; i < 4; i++) {
+    const endpoints = getRandomEndpoints(8);
+    for (let i = 0; i < 8; i++) {
       promises.push(queryNode(clients[i], endpoints[i], wallets[i], apis[i]));
     }
     await Promise.all(promises);

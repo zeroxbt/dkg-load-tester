@@ -5,6 +5,11 @@ const { getRandomEndpoints } = require("./src/util/Endpoint");
 const apis = require("./src/util/apis");
 const wallets = require("./wallets.json");
 
+async function getOverflow(array, index) {
+  const i = index % array.length;
+  return array[i]
+}
+
 async function queryNode(otnode, endpoint, wallet, api) {
   // fetch data
   const data = await api.getData();
@@ -32,7 +37,9 @@ async function queryNode(otnode, endpoint, wallet, api) {
     const promises = [];
     const endpoints = getRandomEndpoints(8);
     for (let i = 0; i < 8; i++) {
-      promises.push(queryNode(clients[i], endpoints[i], wallets[i], apis[i]));
+      promises.push(
+        queryNode(clients[i], endpoints[i], getOverflow(wallets, i), getOverflow(apis, i))
+      );
     }
     await Promise.all(promises);
   }

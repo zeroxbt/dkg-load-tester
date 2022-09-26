@@ -5,7 +5,7 @@ const { getRandomEndpoints } = require("./src/util/Endpoint");
 const apis = require("./src/util/apis");
 const wallets = require("./wallets.json");
 
-async function getOverflow(array, index) {
+function getOverflow(array, index) {
   const i = index % array.length;
   return array[i]
 }

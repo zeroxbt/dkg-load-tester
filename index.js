@@ -9,8 +9,8 @@ const wallets = require("./wallets.json");
   const otnode = new OTNode();
   await otnode.initialize();
 
+  let walletIndex = 0;
   while (true) {
-    let walletIndex = 0;
     for (const api of apis) {
       // fetch data
       const data = await api.getData();

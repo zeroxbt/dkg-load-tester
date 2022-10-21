@@ -12,6 +12,7 @@ const wallets = require("./wallets.json");
   let walletIndex = 0;
   while (true) {
     for (const api of apis) {
+      if(walletIndex === 0) continue
       // fetch data
       const data = await api.getData();
 

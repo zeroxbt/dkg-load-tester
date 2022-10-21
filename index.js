@@ -27,7 +27,7 @@ const wallets = require("./wallets.json");
       );
 
       // get asset
-      if (publishResult?.status === "COMPLETED") {
+      if (publishResult?.operation?.status === "COMPLETED") {
         await otnode.get(
           publishResult.UAL,
           getRandomEndpoint(),

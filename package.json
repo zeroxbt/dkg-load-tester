@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dkg.js": "^6.0.0-beta.3.1.0",
+    "dkg.js": "^6.0.0-beta.3.2.0",
     "dotenv": "^16.0.1",
     "mysql2": "^2.3.3",
     "random-words": "^1.2.0",

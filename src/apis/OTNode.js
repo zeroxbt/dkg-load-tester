@@ -24,7 +24,7 @@ class OTNode {
 
   async publish(content, endpoint, wallet) {
     let options = {
-      visibility: "public",
+      epochsNum: 5,
       holdingTimeInYears: 1,
       tokenAmount: 10,
       maxNumberOfRetries: 30,

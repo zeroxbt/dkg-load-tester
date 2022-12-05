@@ -13,12 +13,6 @@ const CONCURRENCY = 4;
   await otnode.initialize();
 
   while (true) {
-    const data = {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: "John Doe",
-      identifier: Math.floor(Math.random() * 1e10),
-    };
     const endpoints = getRandomEndpoints(concurrency);
     const clientsOptions = [];
     for (let i = 0; i < concurrency; ++i) {
@@ -27,6 +21,12 @@ const CONCURRENCY = 4;
 
     await Promise.all(
       clientsOptions.map(async ({ wallet, endpoint }) => {
+        const data = {
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "John Doe",
+          identifier: Math.floor(Math.random() * 1e10),
+        };
         // create asset
         const publishResult = await otnode.publish(data, endpoint, wallet);
 

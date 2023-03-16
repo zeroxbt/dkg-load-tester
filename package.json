@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dkg.js": "github:Origintrail/dkg.js#v6/new-contracts",
+    "dkg.js": "github:Origintrail/dkg.js#feature/asset-update",
     "dotenv": "^16.0.1",
     "mysql2": "^2.3.3",
     "random-words": "^1.2.0",

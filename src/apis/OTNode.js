@@ -25,8 +25,6 @@ class OTNode {
   async publish(content, endpoint, wallet) {
     let options = {
       epochsNum: 5,
-      holdingTimeInYears: 1,
-      tokenAmount: 10,
       maxNumberOfRetries: 30,
       frequency: 2,
       endpoint,
@@ -48,6 +46,18 @@ class OTNode {
     return this.operation("get", "get", [ual], options);
   }
 
+  async update(ual, content, endpoint, wallet) {
+    let options = {
+      validate: true,
+      maxNumberOfRetries: 30,
+      frequency: 2,
+      endpoint,
+      blockchain: { ...this.blockchain, ...wallet },
+    };
+
+    return this.operation("update", "update", [ual, content], options);
+  }
+
   async operation(type, operation, args, options) {
     this.logDivider();
 
@@ -58,14 +68,22 @@ class OTNode {
     const start = Date.now();
     let errorType = null;
     let errorMessage = null;
-    const result = await this.dkg.asset[operation](...args, options).catch((e) => {
-      errorType = CLIENT_ERROR_TYPE;
-      errorMessage = e.message;
-      console.log(`${type} error : ${errorMessage}`);
-    });
+    const result = await this.dkg.asset[operation](...args, options).catch(
+      (e) => {
+        errorType = CLIENT_ERROR_TYPE;
+        errorMessage = e.message;
+        console.log(`${type} error : ${errorMessage}`);
+      }
+    );
     const end = Date.now();
 
-    console.log(`${type} result : ${JSON.stringify(type === "get" ? {...result, assertion: undefined} : result, null, 2)}`);
+    console.log(
+      `${type} result : ${JSON.stringify(
+        type === "get" ? { ...result, assertion: undefined } : result,
+        null,
+        2
+      )}`
+    );
 
     this.repository.updateRepository(
       type,
@@ -86,7 +104,9 @@ class OTNode {
   }
 
   logDivider() {
-    console.log("---------------------------------------------------------------------")
+    console.log(
+      "---------------------------------------------------------------------"
+    );
   }
 }
 

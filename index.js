@@ -21,18 +21,49 @@ const CONCURRENCY = 7;
 
     await Promise.all(
       clientsOptions.map(async ({ wallet, endpoint }) => {
-        const data = {
-          "@context": "https://schema.org",
-          "@type": "Person",
-          name: "John Doe",
-          identifier: Math.floor(Math.random() * 1e10),
-        };
         // create asset
-        const publishResult = await otnode.publish(data, endpoint, wallet);
+        let identifier = Math.floor(Math.random() * 1e10);
+        const publishResult = await otnode.publish(
+          {
+            public: {
+              "@context": "https://schema.org",
+              "@id": `http://example.com/${identifier}`,
+              "@type": "Person",
+              name: "John Doe",
+            },
+            private: {
+              identifier,
+            },
+          },
+          endpoint,
+          wallet
+        );
 
         // get asset
         if (publishResult?.operation?.status === "COMPLETED") {
           await otnode.get(publishResult.UAL, endpoint, wallet);
+
+          identifier = Math.floor(Math.random() * 1e10);
+          const updateResult = await otnode.update(
+            publishResult.UAL,
+            {
+              public: {
+                "@context": "https://schema.org",
+                "@id": `http://example.com/${identifier}`,
+                "@type": "Person",
+                name: "John Doe",
+              },
+              private: {
+                identifier,
+              },
+            },
+            endpoint,
+            wallet
+          );
+
+          if (updateResult?.operation?.status === "COMPLETED") {
+            await otnode.get(publishResult.UAL, endpoint, wallet);
+          }
         }
 
         // sleep 5 seconds

@@ -32,6 +32,8 @@ const CONCURRENCY = 7;
               name: "John Doe",
             },
             private: {
+              "@context": "https://schema.org",
+              "@id": `http://example.com/${identifier}`,
               identifier,
             },
           },

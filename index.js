@@ -27,13 +27,13 @@ const CONCURRENCY = 2;
           {
             public: {
               "@context": "https://schema.org",
-              "@id": `http://example.com/${identifier}`,
+              "@id": `uuid:${identifier}`,
               "@type": "Person",
               name: "John Doe",
             },
             private: {
               "@context": "https://schema.org",
-              "@id": `http://example.com/${identifier}`,
+              "@id": `uuid:${identifier}`,
               bankAccount: identifier,
             },
           },

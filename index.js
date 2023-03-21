@@ -4,7 +4,7 @@ const OTNode = require("./src/apis/OTNode");
 const { getRandomEndpoints } = require("./src/util/Endpoint");
 const wallets = require("./wallets.json");
 
-const CONCURRENCY = 7;
+const CONCURRENCY = 2;
 
 (async () => {
   const concurrency = Math.min(CONCURRENCY, wallets.length);

@@ -56,7 +56,9 @@ const CONCURRENCY = 2;
                 name: "John Doe",
               },
               private: {
-                identifier,
+                "@context": "https://schema.org",
+                "@id": `uuid:${identifier}`,
+                bankAccount: `${identifier}`,
               },
             },
             endpoint,

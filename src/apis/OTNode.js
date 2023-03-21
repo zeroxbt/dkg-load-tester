@@ -11,8 +11,9 @@ class OTNode {
     });
 
     this.blockchain = {
-      name: "otp",
+      name: "otp::devnet",
       rpc: "wss://lofar.origin-trail.network",
+      hubContract: "0x833048F6e6BEa78E0AAdedeCd2Dc2231dda443FB",
     };
 
     this.repository = new Repository();

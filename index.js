@@ -34,7 +34,7 @@ const CONCURRENCY = 2;
             private: {
               "@context": "https://schema.org",
               "@id": `http://example.com/${identifier}`,
-              identifier,
+              bankAccount: identifier,
             },
           },
           endpoint,

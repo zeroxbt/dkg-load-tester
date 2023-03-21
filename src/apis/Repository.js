@@ -20,7 +20,7 @@ class Repository {
     const operationInfo =
       operation !== "get"
         ? operationResult?.operation
-        : operationResult?.publicGet?.operation;
+        : operationResult?.operation?.publicGet;
     await this.models[`script_${operation}`].create({
       operation_id: operationInfo?.operationId ?? "",
       status: operationInfo?.status ?? "FAILED",

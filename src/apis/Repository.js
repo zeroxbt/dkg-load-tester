@@ -5,7 +5,7 @@ class Repository {
     this.models = await loadModels();
   }
 
-  updateRepository(
+  async updateRepository(
     operation,
     operationResult,
     ual,
@@ -17,9 +17,13 @@ class Repository {
     errorMessage,
     errorType
   ) {
-    this.models[`script_${operation}`].create({
-      operation_id: operationResult?.operation?.operationId ?? "",
-      status: operationResult?.operation?.status ?? "FAILED",
+    const operationInfo =
+      operation !== "get"
+        ? operationResult?.operation
+        : operationResult?.publicGet?.operation;
+    await this.models[`script_${operation}`].create({
+      operation_id: operationInfo?.operationId ?? "",
+      status: operationInfo?.status ?? "FAILED",
       created_at: Date.now(),
       hostname,
       ual,
@@ -27,8 +31,8 @@ class Repository {
       start_timestamp: operationStart,
       end_timestamp: operationEnd,
       blockchain,
-      errorMessage: operationResult?.operation?.errorMessage ?? errorMessage,
-      errorType: operationResult?.operation?.errorType ?? errorType,
+      errorMessage: operationInfo?.errorMessage ?? errorMessage,
+      errorType: operationInfo?.errorType ?? errorType,
     });
   }
 }

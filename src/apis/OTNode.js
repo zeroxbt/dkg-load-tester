@@ -58,7 +58,6 @@ class OTNode {
     };
 
     return this.operation(
-      loadTestId,
       "update",
       "update",
       [ual, content],

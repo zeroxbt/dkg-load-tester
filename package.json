@@ -9,13 +9,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.24.0",
     "dkg.js": "github:Origintrail/dkg.js#feature/asset-update",
     "dotenv": "^16.0.1",
     "mysql2": "^2.3.3",
+    "pino": "^8.11.0",
+    "pino-pretty": "^10.0.0",
     "random-words": "^1.2.0",
     "sequelize": "^6.21.2",
-    "sqlite3": "^5.0.8",
-    "axios": "^0.24.0"
+    "sqlite3": "^5.0.8"
   },
   "devDependencies": {
     "sequelize-cli": "^6.4.1"

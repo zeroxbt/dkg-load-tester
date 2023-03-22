@@ -4,7 +4,8 @@ const Repository = require("./Repository.js");
 const CLIENT_ERROR_TYPE = "DKG_CLIENT_ERROR";
 
 class OTNode {
-  constructor() {
+  constructor(logger) {
+    this.logger = logger;
     this.dkg = new DKGClient({
       port: 8900,
       useSSL: true,
@@ -23,7 +24,7 @@ class OTNode {
     await this.repository.initialize();
   }
 
-  async publish(content, endpoint, wallet) {
+  async publish(content, endpoint, wallet, loadTestId) {
     let options = {
       epochsNum: 5,
       maxNumberOfRetries: 30,
@@ -32,10 +33,10 @@ class OTNode {
       blockchain: { ...this.blockchain, ...wallet },
     };
 
-    return this.operation("publish", "create", [content], options);
+    return this.operation("publish", "create", [content], options, loadTestId);
   }
 
-  async get(ual, endpoint, wallet) {
+  async get(ual, endpoint, wallet, loadTestId) {
     let options = {
       validate: true,
       maxNumberOfRetries: 30,
@@ -44,10 +45,10 @@ class OTNode {
       blockchain: { ...this.blockchain, ...wallet },
     };
 
-    return this.operation("get", "get", [ual], options);
+    return this.operation("get", "get", [ual], options, loadTestId);
   }
 
-  async update(ual, content, endpoint, wallet) {
+  async update(ual, content, endpoint, wallet, loadTestId) {
     let options = {
       validate: true,
       maxNumberOfRetries: 30,
@@ -56,14 +57,21 @@ class OTNode {
       blockchain: { ...this.blockchain, ...wallet },
     };
 
-    return this.operation("update", "update", [ual, content], options);
+    return this.operation(
+      loadTestId,
+      "update",
+      "update",
+      [ual, content],
+      options,
+      loadTestId
+    );
   }
 
-  async operation(type, operation, args, options) {
+  async operation(type, operation, args, options, loadTestId) {
     this.logDivider();
 
-    console.log(
-      `Calling ${type} on blockchain: ${this.blockchain.name}, endpoint: ${options.endpoint}`
+    this.logger.debug(
+      `Calling ${type} on blockchain: ${this.blockchain.name}, endpoint: ${options.endpoint}, load test id: ${loadTestId}`
     );
 
     const start = Date.now();
@@ -73,14 +81,16 @@ class OTNode {
       (e) => {
         errorType = CLIENT_ERROR_TYPE;
         errorMessage = e.message;
-        console.log(`${type} error : ${errorMessage}`);
+        this.logger.error(
+          `Error for operation: ${type}, load test id: ${loadTestId} : ${errorMessage}`
+        );
       }
     );
     const end = Date.now();
 
-    console.log(
-      `${type} result : ${JSON.stringify(
-        type === "get" ? { ...result, assertion: undefined } : result,
+    this.logger.debug(
+      `${type} result for load test id: ${loadTestId} : ${JSON.stringify(
+        type === "get" ? { ...result, assertion: undefined } : { ...result },
         null,
         2
       )}`
@@ -105,7 +115,7 @@ class OTNode {
   }
 
   logDivider() {
-    console.log(
+    this.logger.trace(
       "---------------------------------------------------------------------"
     );
   }

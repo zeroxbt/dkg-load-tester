@@ -68,8 +68,6 @@ class OTNode {
   }
 
   async operation(type, operation, args, options, loadTestId) {
-    this.logDivider();
-
     this.logger.debug(
       `Calling ${type} on blockchain: ${this.blockchain.name}, endpoint: ${options.endpoint}, load test id: ${loadTestId}`
     );
@@ -109,15 +107,7 @@ class OTNode {
       errorType
     );
 
-    this.logDivider();
-
     return result;
-  }
-
-  logDivider() {
-    this.logger.trace(
-      "---------------------------------------------------------------------"
-    );
   }
 }
 

@@ -45,7 +45,7 @@ class OTNode {
       blockchain: { ...this.blockchain, ...wallet },
     };
 
-    return this.operation("get", "get", [ual], options, loadTestId);
+    return this.operation("get", "get", [ual], options, loadTestId, ual);
   }
 
   async update(ual, content, endpoint, wallet, loadTestId) {
@@ -62,11 +62,12 @@ class OTNode {
       "update",
       [ual, content],
       options,
-      loadTestId
+      loadTestId,
+      ual
     );
   }
 
-  async operation(type, operation, args, options, loadTestId) {
+  async operation(type, operation, args, options, loadTestId, ual) {
     this.logger.debug(
       `Calling ${type} on blockchain: ${this.blockchain.name}, endpoint: ${options.endpoint}, load test id: ${loadTestId}`
     );
@@ -96,7 +97,7 @@ class OTNode {
     this.repository.updateRepository(
       type,
       result,
-      result?.UAL,
+      ual ?? result?.UAL,
       result?.assertionId,
       options.endpoint,
       start,

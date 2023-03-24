@@ -49,7 +49,13 @@ const otnode = new OTNode(logger);
 
         // get asset
         if (publishResult?.operation?.status === "COMPLETED") {
-          await otnode.get(publishResult.UAL, endpoint, wallet, loadTestId);
+          await otnode.get(
+            publishResult.UAL,
+            null,
+            endpoint,
+            wallet,
+            loadTestId
+          );
 
           identifier = Math.floor(Math.random() * 1e10);
           const updateResult = await otnode.update(

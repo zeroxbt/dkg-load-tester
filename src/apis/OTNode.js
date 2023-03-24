@@ -43,6 +43,7 @@ class OTNode {
       frequency: 2,
       endpoint,
       state,
+      contentType: "all",
       blockchain: { ...this.blockchain, ...wallet },
     };
 

@@ -6,7 +6,7 @@ const wallets = require("./wallets.json");
 const Logger = require("./src/util/logger");
 const { randomUUID } = require("crypto");
 
-const CONCURRENCY = 2;
+const CONCURRENCY = 1;
 const logger = new Logger("trace");
 const otnode = new OTNode(logger);
 

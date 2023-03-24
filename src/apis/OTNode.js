@@ -42,6 +42,7 @@ class OTNode {
       maxNumberOfRetries: 30,
       frequency: 2,
       endpoint,
+      state,
       blockchain: { ...this.blockchain, ...wallet },
     };
 

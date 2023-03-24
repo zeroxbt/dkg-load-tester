@@ -81,7 +81,7 @@ const otnode = new OTNode(logger);
           if (updateResult?.operation?.status === "COMPLETED") {
             let state = null;
             logger.info(
-              `Starting get, with default state, ual:${ual} load test with id: ${loadTestId}...`
+              `Starting get, with default state, ual:${publishResult.UAL} load test with id: ${loadTestId}...`
             );
             await otnode.get(
               publishResult.UAL,
@@ -94,7 +94,7 @@ const otnode = new OTNode(logger);
             // sleep 5 seconds
             await setTimeout(5 * 1000);
             logger.info(
-              `Starting get after 5 seconds sleep, with state: ${state}, ual:${ual} load test with id: ${loadTestId}...`
+              `Starting get after 5 seconds sleep, with state: ${state}, ual:${publishResult.UAL} load test with id: ${loadTestId}...`
             );
             await otnode.get(
               publishResult.UAL,
@@ -107,7 +107,7 @@ const otnode = new OTNode(logger);
             // sleep 5 seconds
             await setTimeout(5 * 1000);
             logger.info(
-              `Starting get after 5 seconds sleep, with state: ${state}, ual:${ual} load test with id: ${loadTestId}...`
+              `Starting get after 5 seconds sleep, with state: ${state}, ual:${publishResult.UAL} load test with id: ${loadTestId}...`
             );
             await otnode.get(
               publishResult.UAL,

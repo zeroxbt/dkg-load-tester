@@ -90,7 +90,14 @@ class OTNode {
 
     this.logger.debug(
       `${type} result for load test id: ${loadTestId} : ${JSON.stringify(
-        type === "get" ? { ...result, assertion: undefined } : { ...result },
+        type === "get"
+          ? {
+              ...result,
+              assertion: undefined,
+              private: undefined,
+              public: undefined,
+            }
+          : { ...result },
         null,
         2
       )}`

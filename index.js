@@ -100,6 +100,20 @@ const otnode = new OTNode(logger);
               wallet,
               loadTestId
             );
+            await otnode.get(
+              publishResult.UAL,
+              "LATEST",
+              getRandomEndpoints(1)[0],
+              wallet,
+              loadTestId
+            );
+            await otnode.get(
+              publishResult.UAL,
+              "LATEST_FINALIZED",
+              getRandomEndpoints(1)[0],
+              wallet,
+              loadTestId
+            );
           }
         }
 

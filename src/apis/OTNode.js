@@ -36,7 +36,7 @@ class OTNode {
     return this.operation("publish", "create", [content], options, loadTestId);
   }
 
-  async get(ual, endpoint, wallet, loadTestId) {
+  async get(ual, state, endpoint, wallet, loadTestId) {
     let options = {
       validate: true,
       maxNumberOfRetries: 30,

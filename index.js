@@ -6,7 +6,7 @@ const wallets = require("./wallets.json");
 const Logger = require("./src/util/logger");
 const { randomUUID } = require("crypto");
 
-const CONCURRENCY = 1;
+const CONCURRENCY = 2;
 const logger = new Logger("trace");
 const otnode = new OTNode(logger);
 
@@ -79,10 +79,6 @@ const otnode = new OTNode(logger);
           );
 
           if (updateResult?.operation?.status === "COMPLETED") {
-            let state = null;
-            logger.info(
-              `Starting get, with default state, ual:${publishResult.UAL} load test with id: ${loadTestId}...`
-            );
             await otnode.get(
               publishResult.UAL,
               null,
@@ -90,28 +86,16 @@ const otnode = new OTNode(logger);
               wallet,
               loadTestId
             );
-            state = "LATEST";
-            // sleep 5 seconds
-            await setTimeout(5 * 1000);
-            logger.info(
-              `Starting get after 5 seconds sleep, with state: ${state}, ual:${publishResult.UAL} load test with id: ${loadTestId}...`
-            );
             await otnode.get(
               publishResult.UAL,
-              state,
+              "LATEST",
               endpoint,
               wallet,
               loadTestId
             );
-            state = "LATEST_FINALIZED";
-            // sleep 5 seconds
-            await setTimeout(5 * 1000);
-            logger.info(
-              `Starting get after 5 seconds sleep, with state: ${state}, ual:${publishResult.UAL} load test with id: ${loadTestId}...`
-            );
             await otnode.get(
               publishResult.UAL,
-              state,
+              "LATEST_FINALIZED",
               endpoint,
               wallet,
               loadTestId

@@ -71,7 +71,13 @@ class OTNode {
 
   async operation(type, operation, args, options, loadTestId, ual) {
     this.logger.debug(
-      `Calling ${type} on blockchain: ${this.blockchain.name}, endpoint: ${options.endpoint}, load test id: ${loadTestId}`
+      `Calling ${type} on blockchain: ${this.blockchain.name}, endpoint: ${
+        options.endpoint
+      }, load test id: ${loadTestId}, options: ${JSON.stringify(
+        options,
+        null,
+        2
+      )}}`
     );
 
     const start = Date.now();

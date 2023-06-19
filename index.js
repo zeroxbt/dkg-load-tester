@@ -114,6 +114,20 @@ const otnode = new OTNode(logger);
               wallet,
               loadTestId
             );
+            await otnode.get( // Get historical state by index (0)
+              publishResult.UAL,
+              0,
+              getRandomEndpoints(1)[0],
+              wallet,
+              loadTestId
+            );
+            await otnode.get( // Get historical state by state hash
+              publishResult.UAL,
+              publishResult.publicAssertionId,
+              getRandomEndpoints(1)[0],
+              wallet,
+              loadTestId
+            );
           }
         }
 

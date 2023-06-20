@@ -131,17 +131,23 @@ const otnode = new OTNode(logger);
               loadTestId
             );
             await otnode.get(
-              // Get latest state by index (1)
+              // Get latest state by state hash
               publishResult.UAL,
-              1,
+              updateResult.publicAssertionId,
               getRandomEndpoints(1)[0],
               wallet,
               loadTestId
             );
+
+            await otnode.dkg.asset.waitFinalization(publishResult.UAL);
+
+            // wait for nodes to react to StateFinalized event
+            await setTimeout(10 * 1000);
+
             await otnode.get(
-              // Get latest state by state hash
+              // Get latest state by index (1)
               publishResult.UAL,
-              updateResult.publicAssertionId,
+              1,
               getRandomEndpoints(1)[0],
               wallet,
               loadTestId

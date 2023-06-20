@@ -138,22 +138,6 @@ const otnode = new OTNode(logger);
               wallet,
               loadTestId
             );
-
-            await otnode.dkg.asset.waitFinalization(publishResult.UAL, {
-              blockchain: { ...otnode.blockchain, ...wallet },
-            });
-
-            // wait for nodes to react to StateFinalized event
-            await setTimeout(10 * 1000);
-
-            await otnode.get(
-              // Get latest state by index (1)
-              publishResult.UAL,
-              1,
-              getRandomEndpoints(1)[0],
-              wallet,
-              loadTestId
-            );
           }
         }
 

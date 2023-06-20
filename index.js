@@ -140,7 +140,7 @@ const otnode = new OTNode(logger);
             );
 
             await otnode.dkg.asset.waitFinalization(publishResult.UAL, {
-              blockchain: otnode.blockchain,
+              blockchain: { ...otnode.blockchain, ...wallet },
             });
 
             // wait for nodes to react to StateFinalized event

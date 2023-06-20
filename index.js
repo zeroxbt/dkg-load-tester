@@ -114,7 +114,8 @@ const otnode = new OTNode(logger);
               wallet,
               loadTestId
             );
-            await otnode.get( // Get historical state by index (0)
+            await otnode.get(
+              // Get historical state by index (0)
               publishResult.UAL,
               0,
               getRandomEndpoints(1)[0],
@@ -122,21 +123,24 @@ const otnode = new OTNode(logger);
               loadTestId
             );
             await otnode.dkg.asset.waitFinalization(publishResult.UAL);
-            await otnode.get( // Get historical state by state hash
+            await otnode.get(
+              // Get historical state by state hash
               publishResult.UAL,
               publishResult.publicAssertionId,
               getRandomEndpoints(1)[0],
               wallet,
               loadTestId
             );
-            await otnode.get( // Get latest state by index (1)
+            await otnode.get(
+              // Get latest state by index (1)
               publishResult.UAL,
               1,
-               getRandomEndpoints(1)[0],
-               wallet,
-               loadTestId
+              getRandomEndpoints(1)[0],
+              wallet,
+              loadTestId
             );
-            await otnode.get( // Get latest state by state hash
+            await otnode.get(
+              // Get latest state by state hash
               publishResult.UAL,
               updateResult.publicAssertionId,
               getRandomEndpoints(1)[0],

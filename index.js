@@ -121,6 +121,7 @@ const otnode = new OTNode(logger);
               wallet,
               loadTestId
             );
+            await otnode.dkg.asset.waitFinalization(publishResult.UAL);
             await otnode.get( // Get historical state by state hash
               publishResult.UAL,
               publishResult.publicAssertionId,

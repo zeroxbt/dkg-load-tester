@@ -139,7 +139,9 @@ const otnode = new OTNode(logger);
               loadTestId
             );
 
-            await otnode.dkg.asset.waitFinalization(publishResult.UAL);
+            await otnode.dkg.asset.waitFinalization(publishResult.UAL, {
+              blockchain: otnode.blockchain,
+            });
 
             // wait for nodes to react to StateFinalized event
             await setTimeout(10 * 1000);

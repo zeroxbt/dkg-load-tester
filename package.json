@@ -12,6 +12,7 @@
     "axios": "^0.24.0",
     "dkg.js": "https://github.com/Origintrail/dkg.js#feature/get-historical",
     "dotenv": "^16.0.1",
+    "mysql2": "^3.4.0",
     "pino": "^8.11.0",
     "pino-pretty": "^10.0.0",
     "random-words": "^1.2.0",

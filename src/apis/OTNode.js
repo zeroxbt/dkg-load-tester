@@ -15,6 +15,7 @@ class OTNode {
       name: "otp::devnet",
       rpc: "wss://lofar.origin-trail.network",
       hubContract: "0x833048F6e6BEa78E0AAdedeCd2Dc2231dda443FB",
+      handleNotMinedError: true,
     };
 
     this.repository = new Repository();

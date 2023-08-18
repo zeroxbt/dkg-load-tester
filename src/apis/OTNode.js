@@ -70,6 +70,23 @@ class OTNode {
     );
   }
 
+  async waitForFinalization(ual, endpoint, loadTestId, wallet) {
+    let options = {
+      maxNumberOfRetries: 30,
+      frequency: 2,
+      endpoint,
+      blockchain: { ...this.blockchain, ...wallet },
+    }
+    let result = true;
+    await this.dkg.asset.waitFinalization(ual, options).catch(async (e) => {
+      this.logger.error(
+          `Error for operation: ${type}, load test id: ${loadTestId} : ${e.message}`
+      );
+      result = false;
+    });
+    return result
+  }
+
   async operation(type, operation, args, options, loadTestId, ual) {
     this.logger.debug(
       `Calling ${type} on blockchain: ${this.blockchain.name}, endpoint: ${
@@ -110,7 +127,7 @@ class OTNode {
       )}`
     );
 
-    this.repository.updateRepository(
+    await this.repository.updateRepository(
       type,
       result,
       ual ?? result?.UAL,

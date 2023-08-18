@@ -77,7 +77,8 @@ const otnode = new OTNode(logger);
             wallet,
             loadTestId
           );
-
+          await otnode.waitForFinalization(publishResult.UAL, endpoint);
+          
           if (updateResult?.operation?.status === "COMPLETED") {
             await otnode.get(
               publishResult.UAL,

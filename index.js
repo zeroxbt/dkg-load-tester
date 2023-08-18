@@ -77,8 +77,8 @@ const otnode = new OTNode(logger);
             wallet,
             loadTestId
           );
-          await setTimeout(10 * 1000);
           const waitCompleted = await otnode.waitForFinalization(publishResult.UAL, endpoint, loadTestId, wallet);
+          await setTimeout(10 * 1000);
           if (updateResult?.operation?.status === "COMPLETED" && waitCompleted) {
             await otnode.get(
               publishResult.UAL,

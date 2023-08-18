@@ -77,13 +77,14 @@ class OTNode {
       endpoint,
       blockchain: { ...this.blockchain, ...wallet },
     }
+    let result = true;
     await this.dkg.asset.waitFinalization(ual, options).catch(async (e) => {
       this.logger.error(
           `Error for operation: ${type}, load test id: ${loadTestId} : ${e.message}`
       );
-      return false
+      result = false;
     });
-    return true
+    return result
   }
 
   async operation(type, operation, args, options, loadTestId, ual) {
